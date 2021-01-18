@@ -8,4 +8,4 @@ roles:
   - name: geerlingguy.php-mysql
   - name: geerlingguy.php-memcached
   - name: geerlingguy.mysql
-  - name: geerlingguy.memcachedvag
+  - name: geerlingguy.memcached
