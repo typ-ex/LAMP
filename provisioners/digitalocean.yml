@@ -22,8 +22,8 @@
         image: "{{ item.image | default('centos-7-x64') }}"
         region: "{{ item.region | default('nyc3') }}"
         # Customize this default for your account
-        ssh_key:
-          - "{{ item.ssh_key | default('28004419') }}"
+        ssh_keys:
+          - "{{ item.ssh_key | default('28111821') }}"
         unique_name: yes
       register: created_droplets
       with_items: "{{ droplets }}"
