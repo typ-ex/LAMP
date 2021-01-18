@@ -18,8 +18,7 @@
         state: "{{ item.state | default('present') }}"
         name: "{{ item.name }}"
         private_networking: yes
-        # New name might be s-1vcpu-1gb
-        size: "{{ item.size | default('1gb') }}"
+        size: "{{ item.size | default('s-1vcpu-1gb') }}"
         image: "{{ item.image | default('centos-7-x64') }}"
         region: "{{ item.region | default('nyc3') }}"
         # Customize this default for your account
@@ -31,15 +30,15 @@
 
     - name: Add DigitalOcean hosts to inventory groups.
       add_host:
-        name: "{{ item.1.droplet.ip_address }}"
-        groups: "do,{{ droplets[item.0].group }},{{ item.1.droplet.name }}"
+        name: "{{ item.1.data.ip_address }}"
+        groups: "do,{{ droplets[item.0].group }},{{ item.1.data.droplet.name }}"
         # You can dynamically add inventory variables per-host
         ansible_user: root
         mysql_replication_role: > 
-          "{{ 'master' if (item.1.droplet.name == 'a4d.lamp.db.1')
+          "{{ 'master' if (item.1.data.droplet.name == 'a4d.lamp.db.1')
           else 'slave' }}"
         mysql_server_id: "{{ item.0 }}"
-      when: item.1.droplet is defined
+      when: item.1.data is defined
       with_indexed_items: "{{ created_droplets.results }}"
 
 - hosts: do
