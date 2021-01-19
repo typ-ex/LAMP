@@ -79,7 +79,7 @@
 
     - name: Provision EC2 instances.
       ec2:
-        key_name: "{{ item.ssh_key | default('lamp_aws') }}"
+        key_name: "{{ item.ssh_key | default('ansible') }}"
         instance_tags:
           Name: "{{ item.name | default('') }}"
           Application: lamp_aws
