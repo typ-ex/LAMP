@@ -1,21 +1,21 @@
 <?php
 /**
- *@file
- *Infrastructure test page.
+ * @file
+ * Infrastructure test page.
  *
- *DO NOT use this in production. It is simply a PoC.
+ * DO NOT use this in production. It is simply a PoC.
  */
 
 $mysql_servers = array(
-{% for host in groups['lamp-db'] %}
-  '{{ host }},
+{% for host in groups['lamp_db'] %}
+  '{{ host }}',
 {% endfor %}
 );
 $mysql_results = array();
 foreach ($mysql_servers as $host) {
   if ($result = mysql_test_connection($host)) {
-    $mysql_results[$host] = '<span style="color: green;">PASS </span>';
-    $mysql_results[$host] = ' (' . $result['status'] . ')';
+    $mysql_results[$host] = '<span style="color: green;">PASS</span>';
+    $mysql_results[$host] .= ' (' . $result['status'] . ')';
   }
   else {
     $mysql_results[$host] = '<span style="color: red;">FAIL</span>';
@@ -26,13 +26,13 @@ foreach ($mysql_servers as $host) {
 $memcached_result = '<span style="color: red;">FAIL</span>';
 if (class_exists('Memcached')) {
   $memcached = new Memcached;
-  $memcached->addServer('{{ groups['lamp-memcached'][0] }}', 11211);
+  $memcached->addServer('{{ groups['lamp_memcached'][0] }}', 11211);
 
   // Test adding a value to memcached.
   if ($memcached->add('test', 'success', 1)) {
     $result = $memcached->get('test');
     if ($result == 'success') {
-      $memcached_result = '<span style="color: green;"PASS</span>';
+      $memcached_result = '<span style="color: green;">PASS</span>';
       $memcached->delete('test');
     }
   }
@@ -67,7 +67,7 @@ function mysql_test_connection($host) {
 
     return array(
       'success' => TRUE,
-    'status' => ($result[0] == 'ON') ? 'master' : 'slave', 
+      'status' => ($result[0] == 'ON') ? 'master' : 'slave',
     );
   }
   catch (PDOException $e) {
@@ -84,7 +84,7 @@ function mysql_test_connection($host) {
 <body>
   <h1>Host {{ inventory_hostname }}</h1>
   <?php foreach ($mysql_results as $host => $result): ?>
-    <p>MySQL Connection (<?php print $host; ?>):
+    <p>MySQL Connection (<?php print $host; ?>): 
     <?php print $result; ?></p>
   <?php endforeach; ?>
   <p>Memcached Connection: <?php print $memcached_result; ?></p>
