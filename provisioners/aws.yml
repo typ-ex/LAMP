@@ -86,7 +86,7 @@
           inventory_group: "{{ item.group | default('') }}"
           inventory_host: "{{ item.name | default('') }}"
         group: "{{ item.security_group | default('') }}"
-        instance_type: "{{ item.type | default('t2.micro')}}"
+        instance_type: "{{ item.type | default('t2.micro') }}"
         image: "{{ aws_ec2_ami }}"
         wait: yes
         wait_timeout: 500
